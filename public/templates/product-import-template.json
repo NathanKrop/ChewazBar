@@ -1,0 +1,54 @@
+[
+  {
+    "productNumber": 1,
+    "id": "prd_jw_red_750",
+    "name": "Johnnie Walker Red Label",
+    "brand": "Johnnie Walker",
+    "category": "Whisky",
+    "subCategory": "Scotch",
+    "sizeMl": 750,
+    "abv": 40,
+    "bottlesPerCrate": 12,
+    "priceBottle": 2500,
+    "priceCrate": 28500,
+    "supplierCostBottle": 2100,
+    "supplierCostCrate": 24000,
+    "allowCaseBreak": true,
+    "stockBottles": 36,
+    "stockCrates": 8,
+    "active": true,
+    "imageUrl": "https://example.com/images/jw-red-750.jpg",
+    "barcode": "5010106110154",
+    "tags": ["premium", "party", "gift"],
+    "bulkDiscounts": [
+      { "unit": "bottle", "minQty": 6, "percent": 4 },
+      { "unit": "crate", "minQty": 2, "percent": 7 }
+    ]
+  },
+  {
+    "productNumber": 2,
+    "id": "prd_smirnoff_750",
+    "name": "Smirnoff Vodka",
+    "brand": "Smirnoff",
+    "category": "Vodka",
+    "subCategory": "Imported",
+    "sizeMl": 750,
+    "abv": 37.5,
+    "bottlesPerCrate": 12,
+    "priceBottle": 1800,
+    "priceCrate": 20500,
+    "supplierCostBottle": 1500,
+    "supplierCostCrate": 17400,
+    "allowCaseBreak": true,
+    "stockBottles": 48,
+    "stockCrates": 10,
+    "active": true,
+    "imageUrl": "https://example.com/images/smirnoff-750.jpg",
+    "barcode": "5410316998398",
+    "tags": ["classic", "cocktail"],
+    "bulkDiscounts": [
+      { "unit": "bottle", "minQty": 6, "percent": 3 },
+      { "unit": "crate", "minQty": 2, "percent": 6 }
+    ]
+  }
+]

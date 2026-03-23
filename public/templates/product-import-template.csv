@@ -1,0 +1,3 @@
+productNumber,id,name,brand,category,subCategory,sizeMl,abv,bottlesPerCrate,priceBottle,priceCrate,supplierCostBottle,supplierCostCrate,allowCaseBreak,stockBottles,stockCrates,active,imageUrl,barcode,tags,bulkDiscounts
+1,prd_jw_red_750,Johnnie Walker Red Label,Johnnie Walker,Whisky,Scotch,750,40,12,2500,28500,2100,24000,true,36,8,true,https://example.com/images/jw-red-750.jpg,5010106110154,"premium|party|gift","bottle:6:4|crate:2:7"
+2,prd_smirnoff_750,Smirnoff Vodka,Smirnoff,Vodka,Imported,750,37.5,12,1800,20500,1500,17400,true,48,10,true,https://example.com/images/smirnoff-750.jpg,5410316998398,"classic|cocktail","bottle:6:3|crate:2:6"

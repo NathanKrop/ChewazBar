@@ -1,0 +1,15 @@
+{
+  "name": "@chewaz/raven-store",
+  "version": "1.0.0",
+  "description": "Liquor store management and e-commerce system with bottle/crate inventory and marketing prompts",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/kv": "^3.0.0",
+    "africastalking": "^0.7.9",
+    "dotenv": "^17.3.1"
+  }
+}
