@@ -154,6 +154,37 @@ function applyCatalogFilters() {
 function renderCatalog() {
   const catalog = $("#catalog");
 
+  if (!state.products.length) {
+    catalog.innerHTML = `
+      <div class="alert alert-warning" style="text-align: center; padding: 40px;">
+        <h3>Welcome to your new Store!</h3>
+        <p>Your database appears to be empty. This is common on fresh Vercel deployments because <code>data/store.json</code> is not uploaded for security.</p>
+        <br>
+        <button id="seedStoreCatalogBtn" class="btn-primary" style="background: #d4af37; color: #000; font-weight: bold;">🚀 Initialize with Default Products</button>
+        <p><small>(Requires Admin PIN: 2495 by default)</small></p>
+      </div>
+    `;
+
+    const seedBtn = $("#seedStoreCatalogBtn");
+    if (seedBtn) seedBtn.onclick = async () => {
+      const pin = prompt("Enter Admin PIN to initialize database:");
+      if (!pin) return;
+      try {
+        const sample = await (await fetch("/data/store.json")).json();
+        await fetch("/api/admin/seed", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Admin-Pin": pin },
+          body: JSON.stringify(sample)
+        });
+        alert("Success! Database initialized. Refreshing...");
+        location.reload();
+      } catch (err) {
+        alert("Operation failed: " + err.message);
+      }
+    };
+    return;
+  }
+
   if (!state.visibleProducts.length) {
     catalog.innerHTML = "<p>No products match your filters.</p>";
     return;
@@ -760,9 +791,31 @@ function generateCustomerHtmlReceipt(order) {
 }
 
 function openHtmlReceiptInTab(html) {
-  const win = window.open('', '_blank');
-  win.document.write(html);
-  win.document.close();
+  try {
+    const win = window.open('', '_blank');
+    if (!win) throw new Error("Popup blocked");
+    win.document.write(html);
+    win.document.close();
+  } catch (err) {
+    console.error("Window open failed:", err);
+    // Fallback: create a temporary modal if popup is blocked
+    const modal = document.createElement("div");
+    modal.style.position = "fixed";
+    modal.style.top = "0";
+    modal.style.left = "0";
+    modal.style.width = "100%";
+    modal.style.height = "100%";
+    modal.style.background = "rgba(0,0,0,0.8)";
+    modal.style.zIndex = "9999";
+    modal.style.overflow = "auto";
+    modal.innerHTML = `
+      <div style="padding: 20px; max-width: 800px; margin: 20px auto;">
+        <button onclick="this.parentElement.parentElement.remove()" style="margin-bottom: 20px; background: #d4af37; color: white; border: none; padding: 10px 20px; cursor: pointer;">Close & Return</button>
+        <div style="background: white; border-radius: 8px;">${html}</div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
 }
 
 function generateCustomerReceipt(order) {
@@ -822,6 +875,8 @@ async function onAdminLogin(ev) {
   ev.preventDefault();
   const form = new FormData(ev.target);
   const pin = form.get("pin");
+  const errBox = $("#loginError");
+  if (errBox) errBox.style.display = "none";
 
   try {
     await api("/api/admin/login", {
@@ -834,7 +889,12 @@ async function onAdminLogin(ev) {
     await loadAdminData();
     ev.target.reset();
   } catch (err) {
-    alert("Login failed: " + err.message);
+    if (errBox) {
+      errBox.textContent = "Login failed: " + err.message;
+      errBox.style.display = "block";
+    } else {
+      alert("Login failed: " + err.message);
+    }
   }
 }
 

@@ -297,10 +297,26 @@ async function routeApi(req, res, url) {
   if (method === "POST" && url.pathname === "/api/admin/login") {
     return parseBody(req).then(body => {
       const ADMIN_PIN = process.env.ADMIN_PIN || "2495";
+      if (!body.pin) return sendJson(res, 400, { error: "PIN is required" });
       if (body.pin === ADMIN_PIN) {
         return sendJson(res, 200, { ok: true });
       }
       return sendJson(res, 401, { error: "Invalid PIN" });
+    }).catch(err => sendJson(res, 400, { error: err.message }));
+  }
+
+  if (method === "POST" && url.pathname === "/api/admin/seed") {
+    const ADMIN_PIN = process.env.ADMIN_PIN || "2495";
+    if (req.headers["x-admin-pin"] !== ADMIN_PIN) {
+      return sendJson(res, 401, { error: "Unauthorized. Seed requires valid Admin PIN header." });
+    }
+    return parseBody(req).then(async (body) => {
+      if (!body.settings || !Array.isArray(body.products)) {
+        return sendJson(res, 400, { error: "Invalid store data format. Missing settings or products array." });
+      }
+      await writeStore(body);
+      console.log("[SEED] Store data successfully updated via API.");
+      return sendJson(res, 200, { ok: true, message: "Store seeded successfully" });
     }).catch(err => sendJson(res, 400, { error: err.message }));
   }
 
