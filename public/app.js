@@ -154,37 +154,6 @@ function applyCatalogFilters() {
 function renderCatalog() {
   const catalog = $("#catalog");
 
-  if (!state.products.length) {
-    catalog.innerHTML = `
-      <div class="alert alert-warning" style="text-align: center; padding: 40px;">
-        <h3>Welcome to your new Store!</h3>
-        <p>Your database appears to be empty. This is common on fresh Vercel deployments because <code>data/store.json</code> is not uploaded for security.</p>
-        <br>
-        <button id="seedStoreCatalogBtn" class="btn-primary" style="background: #d4af37; color: #000; font-weight: bold;">🚀 Initialize with Default Products</button>
-        <p><small>(Requires Admin PIN: 2495 by default)</small></p>
-      </div>
-    `;
-
-    const seedBtn = $("#seedStoreCatalogBtn");
-    if (seedBtn) seedBtn.onclick = async () => {
-      const pin = prompt("Enter Admin PIN to initialize database:");
-      if (!pin) return;
-      try {
-        const sample = await (await fetch("/data/store.json")).json();
-        await fetch("/api/admin/seed", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Admin-Pin": pin },
-          body: JSON.stringify(sample)
-        });
-        alert("Success! Database initialized. Refreshing...");
-        location.reload();
-      } catch (err) {
-        alert("Operation failed: " + err.message);
-      }
-    };
-    return;
-  }
-
   if (!state.visibleProducts.length) {
     catalog.innerHTML = "<p>No products match your filters.</p>";
     return;
